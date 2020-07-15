@@ -13,6 +13,7 @@ import RefsExample from './components/refsExample';
 import Hoc from './components/hoc';
 import Life from './components/Life';
 import {ColorContext} from './utils/context';
+import { Button, Modal } from '@dxy-mom/dxmm-ui';
 
 function toCelsius(fahrenheit) {
     return (fahrenheit - 32) * 5 / 9;
@@ -51,6 +52,7 @@ class App extends React.Component {
             temperature: 0,
             scale: 'c',
             templateList: ['template1', 'template2', 'template3'],
+            showModal: false,
         };
         this.$tmp = React.createRef();
         this.timerId = null;
@@ -77,6 +79,9 @@ class App extends React.Component {
         });
     }
     render () {
+        const {
+            showModal
+        } = this.state;
         // return (
         //     <div>
         //         <Welcome name={this.state.count}></Welcome>
@@ -87,36 +92,53 @@ class App extends React.Component {
         //         <List></List>
         //     </div>
         // );
-        let celsius = 0;
-        let fahrenheit = 0;
-        if (this.state.scale === 'c') {
-            celsius = this.state.temperature;
-            fahrenheit = tryConvert(this.state.temperature, toFahrenheit);
-        }
-        if (this.state.scale === 'f') {
-            celsius = tryConvert(this.state.temperature, toCelsius);
-            fahrenheit = this.state.temperature;
-        }
-        const config = {
-            normal: (<div>
-                        <Template list={this.state.templateList}></Template>
-                        <TemperatureInput scale="c" temperature={celsius} handleChange={(e) => {this.handleChange(e)}}></TemperatureInput>
-                        <TemperatureInput scale="f" temperature={fahrenheit} handleChange={(e) => {this.handleChange(e)}}></TemperatureInput>
-                        <BoilingVerdict celsius={this.state.temperature}></BoilingVerdict>
-                        <Slot
-                            left={<div>left</div>} right={<div>right</div>}></Slot>
-                        <div class="sample">
-                            <ColorContext.Provider value="yellow">
-                                <Context></Context>
-                            </ColorContext.Provider>
-                        </div>
-                    </div>),
-            state: (<SetSateExp></SetSateExp>),
-            refs: (<RefsExample forwardRef={this.$tmp}></RefsExample>),
-            hoc: (<Hoc></Hoc>),
-            life: (<Life></Life>),
-        }
-        return config[page];
+        // let celsius = 0;
+        // let fahrenheit = 0;
+        // if (this.state.scale === 'c') {
+        //     celsius = this.state.temperature;
+        //     fahrenheit = tryConvert(this.state.temperature, toFahrenheit);
+        // }
+        // if (this.state.scale === 'f') {
+        //     celsius = tryConvert(this.state.temperature, toCelsius);
+        //     fahrenheit = this.state.temperature;
+        // }
+        // const config = {
+        //     normal: (<div>
+        //                 <Template list={this.state.templateList}></Template>
+        //                 <TemperatureInput scale="c" temperature={celsius} handleChange={(e) => {this.handleChange(e)}}></TemperatureInput>
+        //                 <TemperatureInput scale="f" temperature={fahrenheit} handleChange={(e) => {this.handleChange(e)}}></TemperatureInput>
+        //                 <BoilingVerdict celsius={this.state.temperature}></BoilingVerdict>
+        //                 <Slot
+        //                     left={<div>left</div>} right={<div>right</div>}></Slot>
+        //                 <div class="sample">
+        //                     <ColorContext.Provider value="yellow">
+        //                         <Context></Context>
+        //                     </ColorContext.Provider>
+        //                 </div>
+        //             </div>),
+        //     state: (<SetSateExp></SetSateExp>),
+        //     refs: (<RefsExample forwardRef={this.$tmp}></RefsExample>),
+        //     hoc: (<Hoc></Hoc>),
+        //     life: (<Life></Life>),
+        // }
+        // return config[page];
+        return (
+            <div>
+                <Button onClick={() => { this.setState({showModal: true}) }}>按钮</Button>
+                <Modal
+                    visible={showModal}
+                    hideClose={false}
+                    width="260px"
+                    height="330px"
+                    shadowClickClose={false}
+                    onClose={() => {
+                        this.setState({showModal: true})
+                    }}
+                >
+                    <div>弹窗标题</div>
+                </Modal>
+            </div>
+        );
     }
 };
 export default App;
